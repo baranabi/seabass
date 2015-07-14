@@ -1,0 +1,14 @@
+irods
+irods
+tempZone
+1247
+20000
+20199
+/var/lib/irods/Vault
+rods
+yes
+localhost
+5432
+ICAT
+irods
+yes

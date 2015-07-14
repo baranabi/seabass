@@ -1,0 +1,11 @@
+{
+        disable         = yes
+        socket_type     = stream
+        wait            = no
+        user            = ident
+        cps             = 4096 10
+        instances       = UNLIMITED
+        server          = /usr/sbin/in.authd
+        server_args     = -t60 --xerror --os
+}
+
