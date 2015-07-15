@@ -45,7 +45,6 @@ python-psutil        \
 python-requests
 
 
-RUN chmod +x crodstart.sh
 EXPOSE 1247
 # 3.2 Run starting script that sets up iCAT db on cops, and installs IRODS-ICAT pkg.
 ENTRYPOINT  ./crodstart.sh && bash
