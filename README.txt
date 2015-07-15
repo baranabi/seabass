@@ -1,6 +1,5 @@
 #SEABASS
 Baran Balkan 2015
-teeeest
 Seabass simulates a generic iRODS 4.1.3  environment on multiple centos6 machines  using docker containers. 
 
 The components are:
@@ -26,4 +25,9 @@ boms.sh builds coms
 cbase.sh runs Seabass as a daemon, requiring either external communication, or an exec in. 
 
 cint.sh runs Seabass interactively, placing the user in the terminal of COMS. 
+
+GOALS:
+> ALL ENCOMPASSING BUILD SCRIPT
+> ALL ENCOMPASSING RUN SCRIPTS, ONE FOR INTERACTIVE, ONE FOR DETACHED
+
 
