@@ -1,33 +1,36 @@
-#SEABASS
-Baran Balkan 2015
-Seabass simulates a generic iRODS 4.1.3  environment on multiple centos6 machines  using docker containers. 
+<h1>SEABASS</h1>
 
-The components are:
+<p>Baran Balkan 2015
+Seabass simulates a generic iRODS 4.1.3  environment on multiple centos6 machines  using docker containers. </p>
+
+<p>The components are:
 COPS: a postgres server that is used as the iCAT server. 
 CRODS: models the IES
 CABS:  models resource servers
-COMS:  a centos6 machine with iCommands installed, used to talk to CRODS. 
+COMS:  a centos6 machine with iCommands installed, used to talk to CRODS. </p>
 
+<p>This project also contains bash scripts that automate the building and running of docker containers from the images defined earlier. </p>
 
-This project also contains bash scripts that automate the building and running of docker containers from the images defined earlier. 
+<p>scripts that begin with the letter b are build scripts, 
+and scrips that begin with the letter c are run scripts. </p>
 
-scripts that begin with the letter b are build scripts, 
-and scrips that begin with the letter c are run scripts. 
+<h1>BUILD SCRIPTS:</h1>
 
-#BUILD SCRIPTS:
-bops.sh builds cops
+<p>bops.sh builds cops
 brods.sh builds crods
 babs.sh builds cabs
-boms.sh builds coms
+boms.sh builds coms</p>
 
-#RUN SCRIPTS
+<h1>RUN SCRIPTS</h1>
 
-cbase.sh runs Seabass as a daemon, requiring either external communication, or an exec in. 
+<p>cbase.sh runs Seabass as a daemon, requiring either external communication, or an exec in. </p>
 
-cint.sh runs Seabass interactively, placing the user in the terminal of COMS. 
+<p>cint.sh runs Seabass interactively, placing the user in the terminal of COMS. </p>
 
-GOALS:
-> ALL ENCOMPASSING BUILD SCRIPT
-> ALL ENCOMPASSING RUN SCRIPTS, ONE FOR INTERACTIVE, ONE FOR DETACHED
+<p>GOALS:</p>
 
+<blockquote>
+  <p>ALL ENCOMPASSING BUILD SCRIPT
+ALL ENCOMPASSING RUN SCRIPTS, ONE FOR INTERACTIVE, ONE FOR DETACHED</p>
+</blockquote>
 
