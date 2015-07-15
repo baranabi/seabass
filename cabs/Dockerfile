@@ -1,5 +1,4 @@
 FROM centos:6
-COPY irods-resource-4.1.3-centos6-x86_64.rpm /
 
 RUN yum install -y wget sudo
 
@@ -14,7 +13,7 @@ RUN yum install -y    \
     python-requests   \
     fuse-libs
 
-RUN rpm -i irods-resource-4.1.3-centos6-x86_64.rpm 
+RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.3/centos6/irods-resource-4.1.3-centos6-x86_64.rpm 
 
 COPY genresp.sh  /
 COPY cabstart.sh /

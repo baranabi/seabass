@@ -31,9 +31,9 @@ RUN /sbin/chkconfig --level=3 auth on && /etc/init.d/xinetd start
 
 # 3  iRODS!
 # 3.1 Get resources for iRODS-ICAT install. 
-COPY i* /
-COPY crodstart.sh /
-COPY genresp.sh   /
+COPY icatsetup.sql /
+COPY crodstart.sh  /
+COPY genresp.sh    /
 RUN wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN rpm -Uvh epel-release-6*.rpm
 
