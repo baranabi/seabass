@@ -35,7 +35,7 @@ COPY icatsetup.sql /
 COPY crodstart.sh  /
 COPY genresp.sh    /
 RUN  wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN rpm -Uvh epel-release-7*.rpm
+RUN rpm -Uvh epel-release-*.rpm
 
 RUN yum install -y   \
 fuse-libs            \
