@@ -1,9 +1,9 @@
-FROM centos:6
+FROM centos:7
 
 RUN yum install -y wget sudo
 
-RUN wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-RUN rpm -Uvh epel-release-6*.rpm
+RUN wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN rpm -Uvh epel-release-7*.rpm
 
 RUN yum install -y    \
     perl              \
@@ -13,7 +13,7 @@ RUN yum install -y    \
     python-requests   \
     fuse-libs
 
-RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.3/centos6/irods-resource-4.1.3-centos6-x86_64.rpm 
+RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.6/centos7/irods-resource-4.1.6-centos7-x86_64.rpm
 
 COPY genresp.sh  /
 COPY cabstart.sh /

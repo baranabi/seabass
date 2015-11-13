@@ -34,8 +34,8 @@ RUN /sbin/chkconfig --level=3 auth on && /etc/init.d/xinetd start
 COPY icatsetup.sql /
 COPY crodstart.sh  /
 COPY genresp.sh    /
-RUN wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-RUN rpm -Uvh epel-release-6*.rpm
+RUN  wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN rpm -Uvh epel-release-7*.rpm
 
 RUN yum install -y   \
 fuse-libs            \

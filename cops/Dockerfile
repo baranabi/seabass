@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:7
 RUN echo "root:password" | chpasswd
 
 # Config yum repo
@@ -6,7 +6,7 @@ RUN sed -i "19i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
 RUN sed -i "28i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
 
 # Install PGDG rpm and install postgres
-RUN yum localinstall -y http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm
+RUN yum localinstall -y http://yum.postgresql.org/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-1.noarch.rpm
 RUN yum install -y postgresql93 postgresql93-server
 
 # initialize the database in PGDATA

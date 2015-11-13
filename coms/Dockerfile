@@ -1,5 +1,5 @@
-FROM centos:6
+FROM centos:7
 
 RUN yum install -y \
-    sudo fuse-libs
-RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.3/centos6/irods-icommands-4.1.3-centos6-x86_64.rpm
+    sudo fuse-libs openssl
+RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.6/centos7/irods-icommands-4.1.6-centos7-x86_64.rpm
