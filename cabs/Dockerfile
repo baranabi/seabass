@@ -18,5 +18,5 @@ RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.3/centos6/irods-resource-4
 COPY genresp.sh  /
 COPY cabstart.sh /
 
-ENTRYPOINT /cabstart.sh && bash
+ENTRYPOINT /cabstart.sh
 
