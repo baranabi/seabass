@@ -10,7 +10,7 @@ RUN yum localinstall -y http://yum.postgresql.org/9.3/redhat/rhel-7-x86_64/pgdg-
 RUN yum install -y postgresql93 postgresql93-server
 
 # initialize the database in PGDATA
-RUN service postgresql-9.3 initdb
+RUN systemctl enable postgresql-9.3.service
 # Make PostgreSql start automatically with OS
 
 
