@@ -34,8 +34,8 @@ RUN /sbin/chkconfig --level=3 auth on && /etc/init.d/xinetd start
 COPY icatsetup.sql /
 COPY crodstart.sh  /
 COPY genresp.sh    /
-RUN  wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN rpm -Uvh epel-release-*.rpm
+#RUN  wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#RUN rpm -Uvh epel-release-*.rpm
 
 RUN yum install -y   \
 fuse-libs            \
@@ -46,7 +46,5 @@ python-requests
 
 
 EXPOSE 1247
-# 3.2 Run starting script that sets up iCAT db on cops, and installs IRODS-ICAT pkg.
-ENTRYPOINT  ./crodstart.sh && bash
-
-
+# 3.2  set up iCAT db on cops, and installs IRODS-ICAT pkg.
+ENTRYPOINT ./crodstart.sh && bash
