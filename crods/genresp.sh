@@ -2,26 +2,26 @@
 
 RESPFILE=$1
 
-printf "\n"      >  $RESPFILE                            # service accourt user ID
-printf "\n"      >> $RESPFILE                            # service accourt group ID
-printf "\n"      >> $RESPFILE                            # zore rame
+printf "\n"      >  $RESPFILE                            # service account user ID
+printf "\n"      >> $RESPFILE                            # service account group ID
+printf "\n"      >> $RESPFILE                            # zone rame
 printf "\n"      >> $RESPFILE                            # service port #
-printf "\n"      >> $RESPFILE                            # startirg port #
-printf "\n"      >> $RESPFILE                            # erdirg port #
+printf "\n"      >> $RESPFILE                            # starting port #
+printf "\n"      >> $RESPFILE                            # ending port #
 printf "\n"      >> $RESPFILE                            # vault path
-printf "\n"      >> $RESPFILE                            # zorekey
-printf "\n"      >> $RESPFILE                            # regotiatior key
-printf "\n"      >> $RESPFILE                            # cortrol plare port
-printf "\n"      >> $RESPFILE                            # cortrol plare key
-printf "\n"      >> $RESPFILE                            # schema validatior base uri
-printf "\n"      >> $RESPFILE                            # iRODS admir accourt
-printf "password\n" >> $RESPFILE                            # iRODS admir password
-printf "\n"      >> $RESPFILE                            # corfirm iRODS settirgs
-printf "icat\n"     >> $RESPFILE                            # database hostrame
+printf "\n"      >> $RESPFILE                            # zonekey
+printf "\n"      >> $RESPFILE                            # negotiatior key
+printf "\n"      >> $RESPFILE                            # control plane port
+printf "\n"      >> $RESPFILE                            # control plane key
+printf "\n"      >> $RESPFILE                            # schema validation base uri
+printf "\n"      >> $RESPFILE                            # iRODS admin account
+printf "password\n" >> $RESPFILE                            # iRODS admin password
+printf "\n"      >> $RESPFILE                            # confirm iRODS settings
+printf "icat\n"     >> $RESPFILE                            # database hostname
 printf "\n"      >> $RESPFILE                            # database port
-printf "\n"      >> $RESPFILE                            # database DB rame
-printf "\n"      >> $RESPFILE                            # database admir userrame
-printf "password\n" >> $RESPFILE                            # database admir password
-printf "\n"      >> $RESPFILE                            # corfirm database settirgs
+printf "\n"      >> $RESPFILE                            # database DB name
+printf "\n"      >> $RESPFILE                            # database admin username
+printf "password\n" >> $RESPFILE                            # database admin password
+printf "\n"      >> $RESPFILE                            # confirm database settings
 
 

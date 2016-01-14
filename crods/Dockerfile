@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:7
 #1 First install postgres so we can communicate with cops93
 #1.1  Config yum repo
 RUN sed -i "19i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
@@ -17,32 +17,29 @@ RUN yum install -y \
     man            \
     wget           \
     expect         \
+    passwd         \
 
 #2.2 and more stuff for iRODS
     unixODBC       \
     perl           \
     authd          \ 
-    postgresql93-odbc
-
-#2.3 Modify authd config file for xinetd.d
-RUN  rm /etc/xinetd.d/auth
-COPY auth /etc/xinetd.d/
-RUN /sbin/chkconfig --level=3 auth on && /etc/init.d/xinetd start
+    postgresql93-odbc\
+    pyliblzma      \
+    epel-release
 
 # 3  iRODS!
 # 3.1 Get resources for iRODS-ICAT install. 
 COPY icatsetup.sql /
 COPY crodstart.sh  /
 COPY genresp.sh    /
-#RUN  wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-#RUN rpm -Uvh epel-release-*.rpm
-
 RUN yum install -y   \
 fuse-libs            \
 perl-JSON            \
 python-jsonschema    \
 python-psutil        \
-python-requests
+python-requests      \
+libc.so.6            \
+lsof                 
 
 
 EXPOSE 1247
