@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "SETTING UP POSTGRES ICAT SERVER"
-psql -h icat -U postgres -W password -f icatsetup.sql
+psql -h icat -U postgres  -f icatsetup.sql
 
 
 echo INSTALLING IRODS
