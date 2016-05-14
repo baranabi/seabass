@@ -1,13 +1,14 @@
 FROM centos:7
-#1 First install postgres so we can communicate with cops93
+#1 First install postgres so we can communicate with cops
 #1.1  Config yum repo
 RUN sed -i "19i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
 RUN sed -i "28i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
 
 
 #1.2 Install PGDG rpm and install postgres
-RUN yum localinstall -y http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm
-RUN yum install -y postgresql93 postgresql93-server
+RUN yum localinstall -y \
+    https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
+RUN yum install -y postgresql95 postgresql95-server
 
 # 2. prep for install
 # 2.1 Some handy tools for interactive tomfoolery
@@ -23,7 +24,7 @@ RUN yum install -y \
     unixODBC       \
     perl           \
     authd          \ 
-    postgresql93-odbc\
+    postgresql95-odbc\
     pyliblzma      \
     epel-release
 

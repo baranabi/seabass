@@ -1,2 +1,5 @@
+FROM postgres:9.5
 
+ENV POSTGRES_USER     sea
+ENV POSTGRES_PASSWORD bass
 
