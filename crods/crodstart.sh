@@ -1,7 +1,4 @@
 #!/bin/bash
-echo SETTING UP POSTGRES ICAT DATABASE
-psql -h icat -U sea -W bass -f icatsetup.sql
-echo ICAT DB CONFIGURED!
 
 echo INSTALLING IRODS
 rpm -i  ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-icat-4.1.8-centos7-x86_64.rpm

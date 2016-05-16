@@ -15,7 +15,7 @@ RUN yum install -y    \
     lsof              \
     openssl
 
-RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.6/centos7/irods-resource-4.1.6-centos7-x86_64.rpm
+RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-resource-4.1.8-centos7-x86_64.rpm
 
 COPY genresp.sh  /
 COPY cabstart.sh /

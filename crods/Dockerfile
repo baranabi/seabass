@@ -30,7 +30,6 @@ RUN yum install -y \
 
 # 3  iRODS!
 # 3.1 Get resources for iRODS-ICAT install. 
-COPY icatsetup.sql /
 COPY crodstart.sh  /
 COPY genresp.sh    /
 RUN yum install -y   \
