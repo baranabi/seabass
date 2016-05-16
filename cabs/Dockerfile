@@ -13,7 +13,8 @@ RUN yum install -y    \
     python-requests   \
     fuse-libs         \
     lsof              \
-    openssl
+    openssl           \
+    passwd
 
 RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-resource-4.1.8-centos7-x86_64.rpm
 
