@@ -9,3 +9,9 @@ echo SETTING UP IRODS IES IE
 touch respfile
 /genresp.sh respfile
 /var/lib/irods/packaging/setup_irods.sh < respfile
+
+touch initresp
+/initresp.sh initresp
+/var/lib/irods/packaging/setup_irods.sh < initresp
+
+rm respfile initresp

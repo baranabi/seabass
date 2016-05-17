@@ -32,6 +32,7 @@ RUN yum install -y \
 # 3.1 Get resources for iRODS-ICAT install. 
 COPY crodstart.sh  /
 COPY genresp.sh    /
+COPY initresp.sh   /
 RUN yum install -y   \
 fuse-libs            \
 perl-JSON            \
