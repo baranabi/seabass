@@ -12,6 +12,6 @@ touch respfile
 
 touch initresp
 /initresp.sh initresp
-/var/lib/irods/packaging/setup_irods.sh < initresp
+iinit < initresp
 
 rm respfile initresp

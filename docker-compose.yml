@@ -1,0 +1,7 @@
+services:
+  cops:
+    image: seabass/cops
+  crods:
+    image: seabass/crods
+    depends_on:
+      - cops
