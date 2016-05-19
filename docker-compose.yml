@@ -1,7 +1,28 @@
+version: "2"
+
 services:
+
   cops:
-    image: seabass/cops
+    build: cops/.
+    container_name: icat
   crods:
-    image: seabass/crods
-    depends_on:
+    build: crods/.
+    container_name: crods
+    links:
       - cops
+    depends_on: 
+      - cops
+    tty: true
+    entrypoint: /wait-for-it.sh cops:5432
+    command:  -- /crodstart.sh && bash
+  cabs:
+    build: cabs/.
+    container_name: cabs
+    links:
+      - crods
+    depends_on:
+      - crods
+    tty: true
+    entrypoint: /wait-for-it.sh crods:1247
+
+

@@ -33,6 +33,8 @@ RUN yum install -y \
 COPY crodstart.sh  /
 COPY genresp.sh    /
 COPY initresp.sh   /
+COPY wait-for-it.sh /
+
 RUN yum install -y   \
 fuse-libs            \
 perl-JSON            \
