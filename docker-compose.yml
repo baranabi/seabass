@@ -13,16 +13,17 @@ services:
     depends_on: 
       - cops
     tty: true
-    entrypoint: /wait-for-it.sh cops:5432
-    command:  -- /crodstart.sh && bash
-  cabs:
-    build: cabs/.
-    container_name: cabs
-    links:
-      - crods
-    depends_on:
-      - crods
-    tty: true
-    entrypoint: /wait-for-it.sh crods:1247
+    entrypoint: /wait-for-it.sh cops:5432 
+    command:  -- /crodstart.sh && tail -f /dev/null
+
+  #cabs:
+  #  build: cabs/.
+  #  container_name: cabs
+  #  links:
+  #    - crods
+  #  depends_on:
+  #    - crods
+  #  tty: true
+  #  entrypoint: /wait-for-it.sh crods:1247
 
 

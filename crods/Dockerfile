@@ -30,10 +30,11 @@ RUN yum install -y \
 
 # 3  iRODS!
 # 3.1 Get resources for iRODS-ICAT install. 
-COPY crodstart.sh  /
-COPY genresp.sh    /
-COPY initresp.sh   /
-COPY wait-for-it.sh /
+COPY crodstart.sh    /
+COPY crodstall.sh    /
+COPY genresp.sh      /
+COPY initresp.sh     /
+COPY wait-for-it.sh  /
 
 RUN yum install -y   \
 fuse-libs            \
@@ -46,5 +47,6 @@ lsof
 
 
 EXPOSE 1247
+RUN ./crodstall.sh
 # 3.2  set up iCAT db on cops, and installs IRODS-ICAT pkg.
 ENTRYPOINT ./crodstart.sh && bash
