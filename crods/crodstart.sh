@@ -9,3 +9,5 @@ touch initresp
 iinit < initresp
 
 rm respfile initresp
+
+bash

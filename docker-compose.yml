@@ -14,7 +14,7 @@ services:
       - cops
     tty: true
     entrypoint: /wait-for-it.sh cops:5432 
-    command:  -- /crodstart.sh && tail -f /dev/null
+    command:  -- /crodstart.sh && echo hi
 
   #cabs:
   #  build: cabs/.
