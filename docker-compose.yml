@@ -18,7 +18,6 @@ services:
 
   cabs:
     build: cabs/.
-    container_name: cabs
     links:
       - crods
     depends_on:
