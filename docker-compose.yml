@@ -14,16 +14,16 @@ services:
       - cops
     tty: true
     entrypoint: /wait-for-it.sh cops:5432 
-    command:  -- /crodstart.sh && echo hi
+    command:  -- /crodstart.sh 
 
-  #cabs:
-  #  build: cabs/.
-  #  container_name: cabs
-  #  links:
-  #    - crods
-  #  depends_on:
-  #    - crods
-  #  tty: true
-  #  entrypoint: /wait-for-it.sh crods:1247
-
+  cabs:
+    build: cabs/.
+    container_name: cabs
+    links:
+      - crods
+    depends_on:
+      - crods
+    tty: true
+    entrypoint: /wait-for-it.sh crods:1247
+    command: -- /cabstart.sh
 
