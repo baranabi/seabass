@@ -1,35 +1,29 @@
 # seabass
-Dockerized iRODS 4.1.3 environment distributed on multiple centos:6 containers. 
-The subdirectories specify the docker containers that comprise seabass. 
+
+seabass is a virtual iRODS environment comprising docker containers organized via docker compose. 
 
 
-##CONTAINERS
+## how to run
 
-###cops
-the cops container models a postgres server that is used as the iCAT db
+the component containers can be tweaked and run on your own using your own docker/docker-compose acumen.
 
-###crods
-this container links to the iCAT server and acts as the IES. Primary hinge point.
+however, a simple script is provided to help get a simple set up running quickly. 
 
-###cabs
-this container models a resource server, a server not in communication with the iCAT, but in communication with IES
+### seabass.sh
+usage:
 
-###coms
-this container is the primary user interface to the iRODS setup, a minimal centos 6 environment with iCommands set up. 
+./seabass.sh [[-r/--resources] <# of desired resource servers>]
 
-##SCRIPTS
-Seabass is controlled primarily by bash scripts. Can be 
+the -r or --resources option allows you to define a number of resource servers to include in the cluster of containers. 
 
-###build.sh
-builds docker images out of the files in the subdirectories. 
-image name format seabass/<containername>
+By default, when the flag is unused, seabass spins up 0 resource servers, and the cluster only comprises the icat container, and the ies container. 
 
-###sbase.sh
-runs seabass as a daemon, crods is exposed on port 1247, you can either exec into coms, 
-or from the host machine. 
 
-###sint.sh
-runs seabass interactively, plopping the user in a bash terminal in the coms container. 
 
-###sstop.sh
-stops and removes everything. SHUT IT DOWN! IT'S HABBEDING! AAARGH!
+## architecture
+
+
+
+
+
+### containers
