@@ -2,27 +2,43 @@ version: "2"
 
 services:
 
-  cops:
-    build: cops/.
+
+  icat:
+    build: icat/.
     container_name: icat
-  crods:
-    build: crods/.
-    container_name: crods
+
+
+  ies:
+    build: ies/.
+    container_name: ies
     links:
-      - cops
+      - icat
     depends_on: 
-      - cops
+      - icat
     tty: true
-    entrypoint: /wait-for-it.sh cops:5432 
+    entrypoint: /wait-for-it.sh icat:5432 
     command:  -- /crodstart.sh 
 
-  cabs:
-    build: cabs/.
+
+  irs:
+    build: irs/.
     links:
-      - crods
+      - ies
     depends_on:
-      - crods
+      - ies
     tty: true
-    entrypoint: /wait-for-it.sh crods:1247
+    entrypoint: /wait-for-it.sh ies:1247
     command: -- /cabstart.sh
 
+
+  icom:
+    build: icom/.
+    container_name: icom
+    hostname: SEABASS
+    links:
+      - ies
+    depends_on:
+      - ies
+    tty: true
+    entrypoint: /wait-for-it.sh ies:1247
+    command: -- /comstart.sh

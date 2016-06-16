@@ -1,5 +1,5 @@
 #!/bin/bash
-echo SETTING UP IRODS IES IE
+echo SETTING UP IRODS IES 
 touch respfile
 /genresp.sh respfile
 /var/lib/irods/packaging/setup_irods.sh < respfile
