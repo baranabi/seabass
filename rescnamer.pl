@@ -22,8 +22,8 @@ while(<IN>) {
     my $newname = 'SBRS_'.$rsno;
 
     print "renaming $oldname to $newname\n\n"; 
-    print `docker exec -it icom iadmin modresc $oldname name $newname`;
-  }
+    print `echo y | docker exec -i icom  iadmin modresc $oldname name $newname`;
+}
 }
 
 close IN;

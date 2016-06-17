@@ -1,7 +1,6 @@
 #!/bin/bash
 
 docker-compose up -d icat ies icom
-
 while [[ $# > 1 ]]
 do
 key="$1"
@@ -24,5 +23,7 @@ done
 docker ps --format "{{.Image}},{{.ID}},{{.Names}}" > psparsed.csv
 
 perl rescnamer.pl
+rm psparsed.csv
+
 
 docker exec -it icom bash
