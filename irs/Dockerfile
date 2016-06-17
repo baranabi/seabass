@@ -19,6 +19,7 @@ RUN yum install -y    \
 RUN rpm -i ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-resource-4.1.8-centos7-x86_64.rpm
 
 COPY genresp.sh  /
+COPY initresp.sh /
 COPY cabstart.sh /
 COPY wait-for-it.sh /
 ENTRYPOINT /cabstart.sh
