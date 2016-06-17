@@ -3,8 +3,8 @@
 
 
 touch initresp
-initresp.sh initresp
+./initresp.sh initresp
 iinit < initresp
 rm initresp
-
 bash
+

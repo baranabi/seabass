@@ -6,7 +6,6 @@ touch respfile
 
 touch initresp
 /initresp.sh initresp
-iinit < initresp
 
 rm respfile initresp
 
