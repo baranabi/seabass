@@ -29,7 +29,7 @@ printf "\n"      >> $RESPFILE
 #13 confirm settings
 printf "\n"      >> $RESPFILE                           
 #14 IES server hostname
-printf "crods\n"         >> $RESPFILE                      
+printf "ies\n"         >> $RESPFILE                      
 #15 zone name
 printf "tempZone\n"     >> $RESPFILE                   
 #16 confirm settings

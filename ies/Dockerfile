@@ -31,7 +31,6 @@ RUN yum install -y \
 # 3  iRODS!
 # 3.1 Get resources for iRODS-ICAT install. 
 COPY crodstart.sh    /
-COPY crodstall.sh    /
 COPY genresp.sh      /
 COPY initresp.sh     /
 COPY wait-for-it.sh  /
@@ -47,6 +46,9 @@ lsof
 
 
 EXPOSE 1247
-RUN ./crodstall.sh
+
+RUN rpm -i  ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-icat-4.1.8-centos7-x86_64.rpm
+RUN rpm -i  ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-database-plugin-postgres-1.8-centos7-x86_64.rpm
+
 # 3.2  set up iCAT db on cops, and installs IRODS-ICAT pkg.
-ENTRYPOINT ./crodstart.sh && bash
+ENTRYPOINT ./crodstart.sh
