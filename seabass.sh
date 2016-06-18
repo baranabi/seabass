@@ -1,7 +1,6 @@
 #!/bin/bash
 
 docker-compose up -d icat ies icom
-
 while [[ $# > 1 ]]
 do
 key="$1"
@@ -18,4 +17,13 @@ case $key in
 esac
 shift
 done
+
+
+# generate .csv, formatted metadata from docker ps to help us rename the resources. 
+docker ps --format "{{.Image}},{{.ID}},{{.Names}}" > psparsed.csv
+
+perl rescnamer.pl
+rm psparsed.csv
+
+
 docker exec -it icom bash
