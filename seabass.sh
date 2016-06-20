@@ -1,6 +1,7 @@
 #!/bin/bash
+export SEABASS_MOUNT_PATH=`pwd`
 
-docker-compose up -d icat ies icom
+# parse options
 while [[ $# > 1 ]]
 do
 key="$1"
@@ -8,7 +9,10 @@ key="$1"
 case $key in
   -r|--resources)
   RESOURCES="$2"
-  docker-compose scale irs=$RESOURCES
+  shift
+  ;;
+  -v|--volumes)
+  export SEABASS_MOUNT_PATH="$2"
   shift
   ;;
   *)
@@ -18,12 +22,17 @@ esac
 shift
 done
 
+# spin up the containers
+docker-compose up -d icat ies icom
+if [ $RESOURCES -ne 0 ]
+then
+  docker-compose scale irs=$RESOURCES
+fi
 
-# generate .csv, formatted metadata from docker ps to help us rename the resources. 
+# rename resources
 docker ps --format "{{.Image}},{{.ID}},{{.Names}}" > psparsed.csv
-
 perl rescnamer.pl
 rm psparsed.csv
 
-
+# drop into interactive session
 docker exec -it icom bash
