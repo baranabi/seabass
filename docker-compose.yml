@@ -41,6 +41,6 @@ services:
       - ies
     tty: true
     volumes:
-      - "${SEABASS_MOUNT_PATH}:/mnt/"
+      - "${SEABASS_MOUNT_PATH}:/home/"
     entrypoint: /wait-for-it.sh ies:1247
     command: -- /comstart.sh
