@@ -31,7 +31,7 @@ fi
 
 # rename resources
 docker ps --format "{{.Image}},{{.ID}},{{.Names}}" > psparsed.csv
-perl rescnamer.pl
+perl rescnamer.pl $RESOURCES
 rm psparsed.csv
 
 # drop into interactive session

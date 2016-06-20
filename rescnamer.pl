@@ -1,6 +1,21 @@
 use strict;
 use warnings;
 
+
+my $RESOURCES = $ARGV[0];
+
+#first we wait for the resource servers to get ready. 
+my $upcount = 0;
+
+while ($upcount - 1 < $RESOURCES  ) {
+  print "waiting for resources to get ready...";
+  my $rstring = `docker exec -i icom ilsresc`;
+  my @uparray = split("\n",$rstring);
+  $upcount = scalar @uparray;
+}
+
+
+
 # open the csv
 open (IN, "psparsed.csv");
 
