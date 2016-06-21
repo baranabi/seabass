@@ -1,4 +1,10 @@
 FROM centos:7
+
+# IRODS ICAT ENABLED SERVER ON CENTOS 7 aka CRODS
+# this container is used in seabass as the IES in an iRODS set up. 
+# the actual catalog  database is contained in the container ICAT (aka COPS)
+# For this set up we use postgresql 9.5 for our database. 
+
 #1 First install postgres so we can communicate with cops
 #1.1  Config yum repo
 RUN sed -i "19i exclude=postgresql*"  /etc/yum.repos.d/CentOS-Base.repo
@@ -44,11 +50,12 @@ python-requests      \
 libc.so.6            \
 lsof                 
 
-
+# 3.2 Expose iRODS port. 
 EXPOSE 1247
 
+# 3.3 install iRODS
 RUN rpm -i  ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-icat-4.1.8-centos7-x86_64.rpm
 RUN rpm -i  ftp://ftp.renci.org/pub/irods/releases/4.1.8/centos7/irods-database-plugin-postgres-1.8-centos7-x86_64.rpm
 
-# 3.2  set up iCAT db on cops, and installs IRODS-ICAT pkg.
+# 3.4 entrypoint is a start script which runs the iRODS setup script and iinit to get the iCommands set up
 ENTRYPOINT ./crodstart.sh

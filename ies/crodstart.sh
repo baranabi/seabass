@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Start script for IES container. uses genresp.sh and initresp.sh to generate responses for set up scripts
+# finally starts a bash session for an interactive entrypoint. 
+
 echo SETTING UP IRODS IES 
 touch respfile
 /genresp.sh respfile
