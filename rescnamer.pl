@@ -7,13 +7,16 @@ my $RESOURCES = $ARGV[0];
 #first we wait for the resource servers to get ready. 
 my $upcount = 0;
 
+print "\nwaiting for resources to get ready...";
 while ($upcount - 1 < $RESOURCES  ) {
-  print "waiting for resources to get ready...";
-  my $rstring = `docker exec -i icom ilsresc`;
+  
+  sleep 1;
+  my $rstring = `docker exec -i icom ilsresc 2>/dev/null`;
   my @uparray = split("\n",$rstring);
   $upcount = scalar @uparray;
+  print ".";
 }
-
+print "\n";
 
 
 # open the csv
@@ -37,7 +40,7 @@ while(<IN>) {
     my $newname = 'SBRS_'.$rsno;
 
     print "renaming $oldname to $newname\n\n"; 
-    print `echo y | docker exec -i icom  iadmin modresc $oldname name $newname`;
+    `echo y | docker exec -i icom  iadmin modresc $oldname name $newname`;
 }
 }
 

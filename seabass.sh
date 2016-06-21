@@ -35,4 +35,5 @@ perl rescnamer.pl $RESOURCES
 rm psparsed.csv
 
 # drop into interactive session
+clear
 docker exec -it icom bash
