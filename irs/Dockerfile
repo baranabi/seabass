@@ -1,5 +1,8 @@
 FROM centos:7
 
+# IRODS RESOURCE SERVER
+# this image is used to spin up additional external resources for our iRODS set up. 
+
 RUN yum install -y wget sudo
 
 RUN wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm

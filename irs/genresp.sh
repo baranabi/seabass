@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# generates responses for irods resource server setup 
 RESPFILE=$1
 
 #1 irods service account name

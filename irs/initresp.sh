@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# generates responses for iinit
 RESPFILE=$1
 
 printf 'ies\n'       >  $RESPFILE 
