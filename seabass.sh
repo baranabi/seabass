@@ -2,7 +2,7 @@
 export SEABASS_MOUNT_PATH=`pwd`
 
 # parse options
-while [[ $# > 1 ]]
+while [[ $# -ge  1 ]]
 do
 key="$1"
 
@@ -11,9 +11,13 @@ case $key in
   RESOURCES="$2"
   shift
   ;;
-  -v|--volumes)
+  -m|--mount)
   export SEABASS_MOUNT_PATH="$2"
   shift
+  ;;
+  -v|--version)
+  cat VERSION
+  exit 0  
   ;;
   *)
 
@@ -21,7 +25,6 @@ case $key in
 esac
 shift
 done
-
 # spin up the containers
 docker-compose up -d icat ies icom
 if [ $RESOURCES -ne 0 ]
@@ -35,5 +38,6 @@ perl rescnamer.pl $RESOURCES
 rm psparsed.csv
 
 # drop into interactive session
+
 clear
 docker exec -it icom bash
