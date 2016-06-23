@@ -1,12 +1,18 @@
 use strict;
 use warnings;
 
+# this script is used to rename the resource servers
+# in the seabass.sh script, when we use docker-compose scale to generate resource containers
+# the resource names in iRODS are generated from the container's CID. 
+# So this script renames the resources into names that are human readable, and numbered. 
+# the image named seabass_irs_n will have a resource name SBRS_n in iRODS. 
 
+
+# number of resources provided as argument (see seabass.sh for usage example)
 my $RESOURCES = $ARGV[0];
 
 #first we wait for the resource servers to get ready. 
 my $upcount = 0;
-
 print "\nwaiting for resources to get ready...";
 while ($upcount - 1 < $RESOURCES  ) {
   
@@ -19,7 +25,7 @@ while ($upcount - 1 < $RESOURCES  ) {
 print "\n";
 
 
-# open the csv
+# open the csv of our formatted docker ps output. 
 open (IN, "psparsed.csv");
 
 while(<IN>) {
