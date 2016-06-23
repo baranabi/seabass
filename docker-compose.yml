@@ -1,13 +1,21 @@
 version: "2"
 
+# The compose file for seabass. 
+# The architecture of the set up is pretty well outlined here
+# our set up comprises four services, each corresponding to a component of an iRODS cluster
+# this file makes it possible for the user to customize behavior as they wish with 
+# their docker-compose fu. 
+# however we have a script for a flexible iRODS set up named seabass.sh. 
+
+
 services:
 
-
+  # this is the postgres container that hosts the icat db. 
   icat:
     build: icat/.
     container_name: icat
 
-
+  # this is a cent7 container that represents the iRODS icat enabled server. 
   ies:
     build: ies/.
     container_name: ies
@@ -19,7 +27,9 @@ services:
     entrypoint: /wait-for-it.sh icat:5432 
     command:  -- /crodstart.sh 
 
-
+  # this is a cent7 container representing an iRODS resource server. 
+  # using the seabass.sh script, by default, none of these are generated, 
+  # but rather the amount is determined with the -r flag. 
   irs:
     build: irs/.
     links:
@@ -30,7 +40,8 @@ services:
     entrypoint: /wait-for-it.sh ies:1247
     command: -- /cabstart.sh
 
-
+  # this container hosts just iCommands, and also mounts a filesystem specified by the SEABASS_MOUNT_PATH env var. 
+  # this variable is set by the seabass.sh script as "." by default, or an alternate filepath specified after the -v flag.
   icom:
     build: icom/.
     container_name: icom
