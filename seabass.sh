@@ -1,6 +1,6 @@
 #!/bin/bash
 export SEABASS_MOUNT_PATH=`pwd`
-
+RESOURCES="0"
 # parse options
 while [[ $# -ge  1 ]]
 do
