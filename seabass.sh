@@ -1,5 +1,7 @@
 #!/bin/bash
 
+usage() { echo "usage: blah blah blah"; exit 0;}
+
 
 # default mount path 
 export SEABASS_MOUNT_PATH=`pwd`
@@ -21,7 +23,7 @@ case $opt in
   ;;
   h)
   echo "help option"
-  exit 1
+  usage
   ;;
   \?)
   echo "INVALID OPTION"
