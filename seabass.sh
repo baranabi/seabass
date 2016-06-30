@@ -1,26 +1,37 @@
 #!/bin/bash
-export SEABASS_MOUNT_PATH=`pwd`
-RESOURCES="0"
-# parse options
-while [[ $# -ge  1 ]]
-do
-key="$1"
 
-case $key in
-  -r|--resources)
+usage() { echo "usage: blah blah blah"; exit 0;}
+
+
+# default mount path 
+export SEABASS_MOUNT_PATH=`pwd`
+# default number of resources
+RESOURCES="0"
+
+#getopts to parse options
+while getopts ":r:m:vh" opt; do
+case $opt in
+  r)
   RESOURCES="$2"
-  shift
   ;;
-  -m|--mount)
+  m)
   export SEABASS_MOUNT_PATH="$2"
-  shift
   ;;
-  -v|--version)
+  v)
   cat VERSION
   exit 0  
   ;;
-  *)
-
+  h)
+  echo "help option"
+  usage
+  ;;
+  \?)
+  echo "INVALID OPTION"
+  exit 1
+  ;;
+  :)
+  echo "required argument not found!"
+  exit 1
   ;;
 esac
 shift
