@@ -1,6 +1,22 @@
 #!/bin/bash
 
-usage() { echo "usage: blah blah blah"; exit 0;}
+
+wrong(){ echo "run seabass.sh -h for help"; exit 1;}
+
+usage()
+{
+ echo -e "usage: ./seabass.sh [OPTIONS]";
+ echo -e "       ./seabass.sh [ -h (help) | -v (version info)]" ; 
+ echo -e "\nOptions:\n"; 
+ echo -e "-r  argument is number of resource containers to spin up. (default = 0)"; 
+ echo -e "-m  argument is path of filesystem to mount to icom:/home (default = .) "; 
+ echo -e "-v  print version number and quit.";
+ echo -e "-h  prints usage." 
+ exit 0;
+}
+
+
+
 
 
 # default mount path 
@@ -22,16 +38,15 @@ case $opt in
   exit 0  
   ;;
   h)
-  echo "help option"
   usage
   ;;
   \?)
-  echo "INVALID OPTION"
-  exit 1
+  echo "ERROR : INVALID OPTION!"
+  wrong
   ;;
   :)
-  echo "required argument not found!"
-  exit 1
+  echo "ERROR : MISSING ARGUMENT!"
+  wrong
   ;;
 esac
 shift
