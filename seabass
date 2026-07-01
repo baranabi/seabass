@@ -1,0 +1,315 @@
+#!/usr/bin/env python3
+"""
+seabass — topology-driven iRODS test environment.
+
+Usage:
+  seabass up [topology.yaml]
+  seabass down
+  seabass shell [service]
+  seabass test <topology.yaml> <script>
+  seabass generate [topology.yaml]
+"""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    print("error: 'pyyaml' is required — install with: pip install pyyaml")
+    sys.exit(1)
+
+
+HERE = Path(__file__).resolve().parent
+
+# ---------------------------------------------------------------------------
+# defaults
+# ---------------------------------------------------------------------------
+DEFAULTS = {
+    "zone_name": "tempZone",
+    "admin_password": "password",
+    "zone_key": "TEMPORARY_ZONE_KEY",
+    "negotiation_key": "32_byte_server_negotiation_key__",
+    "control_plane_key": "32_byte_server_control_plane_key",
+    "database": {
+        "hostname": "icat",
+        "image": "postgres:16",
+        "user": "irods",
+        "password": "password",
+        "db_name": "ICAT",
+    },
+    "provider": {
+        "hostname": "ies",
+        "resources": [
+            {
+                "name": "demoResc",
+                "type": "unixfilesystem",
+                "path": "/var/lib/irods/Vault",
+            }
+        ],
+    },
+    "consumers": [],
+    "clients": [
+        {
+            "hostname": "icom",
+            "mount": os.environ.get("SEABASS_MOUNT_PATH", "."),
+        }
+    ],
+}
+
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+def _compose_cmd():
+    for candidate in [["docker", "compose"], ["docker-compose"]]:
+        try:
+            subprocess.run(candidate + ["version"], capture_output=True, check=True)
+            return candidate
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            continue
+    print("error: docker compose not found")
+    sys.exit(1)
+
+
+def _py_path(p):
+    """Return an absolute POSIX path string safe for YAML."""
+    return p.resolve().as_posix()
+
+
+# ---------------------------------------------------------------------------
+# topology loading
+# ---------------------------------------------------------------------------
+def load_topology(path=None):
+    if path is None:
+        path = Path.cwd() / "seabass.yaml"
+        if not path.exists():
+            path = HERE / "topologies" / "default.yaml"
+    path = Path(path)
+    if not path.exists():
+        print(f"error: topology not found: {path}")
+        sys.exit(1)
+    with open(path) as f:
+        top = yaml.safe_load(f)
+    for k, v in DEFAULTS.items():
+        top.setdefault(k, v)
+    return top
+
+
+# ---------------------------------------------------------------------------
+# compose generation
+# ---------------------------------------------------------------------------
+def generate(top, output_dir):
+    output_dir = Path(output_dir)
+    zone = top["zone_name"]
+    admin_pw = top["admin_password"]
+    zone_key = top.get("zone_key")
+    neg_key = top.get("negotiation_key")
+    ctl_key = top.get("control_plane_key")
+    db = top["database"]
+    prov = top["provider"]
+
+    db_hostname = db["hostname"]
+    db_user = db.get("user", "irods")
+    db_password = db.get("password", "password")
+    db_name = db.get("db_name", "ICAT")
+    prov_hostname = prov.get("hostname", "ies")
+    services = {}
+
+    # --- database -----------------------------------------------------------
+    init_sql = (
+        f'CREATE DATABASE "{db_name}";\n'
+        f'CREATE USER {db_user} WITH PASSWORD \'{db_password}\';\n'
+        f'GRANT ALL PRIVILEGES ON DATABASE "{db_name}" TO {db_user};\n'
+        f'ALTER DATABASE "{db_name}" OWNER TO {db_user};\n'
+    )
+    sql_path = output_dir / "_initdb.sql"
+    sql_path.write_text(init_sql)
+
+    services[db_hostname] = {
+        "container_name": db_hostname,
+        "image": db.get("image", "postgres:16"),
+        "environment": {
+            "POSTGRES_USER": db_user,
+            "POSTGRES_PASSWORD": db_password,
+        },
+        "volumes": [f"{_py_path(sql_path)}:/docker-entrypoint-initdb.d/init.sql"],
+        "healthcheck": {
+            "test": ["CMD-SHELL", f"pg_isready -U {db_user}"],
+            "interval": "5s",
+            "timeout": "5s",
+            "retries": 5,
+        },
+    }
+
+    # --- provider -----------------------------------------------------------
+    prov_env = {
+        "IRODS_SERVER_ROLE": "provider",
+        "IRODS_ZONE_NAME": zone,
+        "IRODS_ADMIN_PASSWORD": admin_pw,
+        "IRODS_HOST": prov_hostname,
+        "IRODS_PORT": str(prov.get("port", 1247)),
+        "IRODS_DB_HOST": db_hostname,
+        "IRODS_DB_NAME": db_name,
+        "IRODS_DB_USER": db_user,
+        "IRODS_DB_PASSWORD": db_password,
+        "IRODS_ZONE_KEY": zone_key,
+        "IRODS_NEGOTIATION_KEY": neg_key,
+        "IRODS_CONTROL_PLANE_KEY": ctl_key,
+    }
+    resc = prov.get("resources", [])
+    if resc:
+        prov_env["IRODS_RESOURCE_NAME"] = resc[0]["name"]
+        prov_env["IRODS_VAULT_DIR"] = resc[0].get("path", "/var/lib/irods/Vault")
+
+    services[prov_hostname] = {
+        "container_name": prov_hostname,
+        "build": _py_path(HERE / "irods-server"),
+        "environment": prov_env,
+        "depends_on": {db_hostname: {"condition": "service_healthy"}},
+    }
+
+    # --- consumers ----------------------------------------------------------
+    for cons in top.get("consumers", []):
+        ch = cons["hostname"]
+        cons_env = {
+            "IRODS_SERVER_ROLE": "consumer",
+            "IRODS_ZONE_NAME": zone,
+            "IRODS_ADMIN_PASSWORD": admin_pw,
+            "IRODS_HOST": ch,
+            "IRODS_CATALOG_PROVIDER": prov_hostname,
+            "IRODS_PORT": str(cons.get("port", 1247)),
+            "IRODS_ZONE_KEY": zone_key,
+            "IRODS_NEGOTIATION_KEY": neg_key,
+            "IRODS_CONTROL_PLANE_KEY": ctl_key,
+        }
+        cr = cons.get("resources", [])
+        if cr:
+            cons_env["IRODS_RESOURCE_NAME"] = cr[0]["name"]
+            cons_env["IRODS_VAULT_DIR"] = cr[0].get("path", "/var/lib/irods/Vault")
+
+        svc = {
+            "container_name": ch,
+            "hostname": ch,
+            "build": _py_path(HERE / "irods-server"),
+            "environment": cons_env,
+            "depends_on": [prov_hostname],
+        }
+        if "ports" in cons:
+            svc["ports"] = cons["ports"]
+        services[ch] = svc
+
+    # --- clients ------------------------------------------------------------
+    for cli in top.get("clients", []):
+        ch = cli["hostname"]
+        cli_env = {
+            "IRODS_PROVIDER_HOST": prov_hostname,
+            "IRODS_PROVIDER_PORT": str(prov.get("port", 1247)),
+            "IRODS_ZONE_NAME": zone,
+            "IRODS_ADMIN_USER": "rods",
+            "IRODS_ADMIN_PASSWORD": admin_pw,
+        }
+        svc = {
+            "container_name": ch,
+            "hostname": ch,
+            "build": _py_path(HERE / "icom"),
+            "environment": cli_env,
+            "depends_on": [prov_hostname],
+            "tty": True,
+        }
+        if "mount" in cli:
+            svc["volumes"] = [f"{cli['mount']}:/home/"]
+        services[ch] = svc
+
+    # --- write docker-compose.yml ------------------------------------------
+    compose = {"services": services}
+    # multi-zone federation can add networks here
+    if "networks" in top:
+        compose["networks"] = top["networks"]
+
+    out = output_dir / "docker-compose.yml"
+    with open(out, "w") as f:
+        yaml.dump(compose, f, sort_keys=False, indent=2, default_flow_style=False)
+    print(f"Generated {out}")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# commands
+# ---------------------------------------------------------------------------
+def cmd_up(topology, detach=True):
+    top = load_topology(topology)
+    generate(top, Path.cwd())
+    dc = _compose_cmd()
+    cmd = dc + ["up", "--build", "-d"] if detach else dc + ["up", "--build"]
+    subprocess.run(cmd, check=True)
+    if detach:
+        print("Run  seabass shell  to enter the icom container.")
+
+
+def cmd_down():
+    dc = _compose_cmd()
+    subprocess.run(dc + ["down", "-v"])
+
+
+def cmd_shell(service):
+    subprocess.run(["docker", "exec", "-it", service, "bash"], check=False)
+
+
+def cmd_test(topology, script):
+    top = load_topology(topology)
+    generate(top, Path.cwd())
+    dc = _compose_cmd()
+    subprocess.run(dc + ["up", "--build", "-d"], check=True)
+    try:
+        subprocess.run(["bash", script], check=True)
+    finally:
+        subprocess.run(dc + ["down", "-v"], check=False)
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        description="seabass — topology-driven iRODS test environment"
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p_up = sub.add_parser("up", help="Spin up the topology")
+    p_up.add_argument("topology", nargs="?", default=None)
+    p_up.add_argument("--no-detach", action="store_true")
+
+    p_down = sub.add_parser("down", help="Tear down")
+
+    p_shell = sub.add_parser("shell", help="Shell into a service")
+    p_shell.add_argument("service", nargs="?", default="icom")
+
+    p_test = sub.add_parser("test", help="Up, run script, tear down")
+    p_test.add_argument("topology", nargs="?", default=None)
+    p_test.add_argument("script")
+
+    p_gen = sub.add_parser("generate", help="Generate docker-compose.yml only")
+    p_gen.add_argument("topology", nargs="?", default=None)
+    p_gen.add_argument("--output", "-o", default=str(Path.cwd()))
+
+    args = parser.parse_args()
+
+    if args.command == "up":
+        cmd_up(args.topology, detach=not args.no_detach)
+    elif args.command == "down":
+        cmd_down()
+    elif args.command == "shell":
+        cmd_shell(args.service)
+    elif args.command == "test":
+        cmd_test(args.topology, args.script)
+    elif args.command == "generate":
+        top = load_topology(args.topology)
+        generate(top, args.output)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,7 @@
+# Two zones, each with their own database + provider.
+# Stand up with:  docker compose -p zone-a -f zone-a.yml up -d
+#                 docker compose -p zone-b -f zone-b.yml up -d
+# (Multi-compose federation requires manual zone key exchange.)
+#
+# For now this is a reference — the seabass CLI cannot federate
+# multiple compose projects automatically yet.

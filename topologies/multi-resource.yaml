@@ -1,0 +1,28 @@
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: SBRS_1
+        type: unixfilesystem
+        path: /var/lib/irods/Vault
+  - hostname: irs2
+    resources:
+      - name: SBRS_2
+        type: unixfilesystem
+        path: /var/lib/irods/Vault
+
+clients:
+  - hostname: icom
+    mount: "."

@@ -1,0 +1,9 @@
+[project]
+name = "seabass"
+version = "2.0.0"
+description = "Topology-driven iRODS test environment"
+requires-python = ">=3.11"
+dependencies = ["pyyaml"]
+
+[project.scripts]
+seabass = "seabass:main"

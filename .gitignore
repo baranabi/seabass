@@ -4,4 +4,7 @@
 *.*~
 *~
 Dockerfile.*
-kill.sh
+docker-compose.yml
+_initdb.sql
+/__pycache__/
+*.pyc

@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
-
-# WRITTEN BY VISHNUBOB @ https://github.com/vishnubob/wait-for-it.git
-
-#   Use this script to test if a given TCP host/port are available
-
 cmdname=$(basename $0)
-
 echoerr() { if [[ $QUIET -ne 1 ]]; then echo "$@" 1>&2; fi }
-
 usage()
 {
     cat << USAGE >&2
@@ -15,16 +8,13 @@ Usage:
     $cmdname host:port [-s] [-t timeout] [-- command args]
     -h HOST | --host=HOST       Host or IP under test
     -p PORT | --port=PORT       TCP port under test
-                                Alternatively, you specify the host and port as host:port
     -s | --strict               Only execute subcommand if the test succeeds
     -q | --quiet                Don't output any status messages
     -t TIMEOUT | --timeout=TIMEOUT
-                                Timeout in seconds, zero for no timeout
     -- COMMAND ARGS             Execute command with args after the test finishes
 USAGE
     exit 1
 }
-
 wait_for()
 {
     if [[ $TIMEOUT -gt 0 ]]; then
@@ -46,10 +36,8 @@ wait_for()
     done
     return $result
 }
-
 wait_for_wrapper()
 {
-    # In order to support SIGINT during timeout: http://unix.stackexchange.com/a/57692
     if [[ $QUIET -eq 1 ]]; then
         timeout $TIMEOUT $0 --quiet --child --host=$HOST --port=$PORT --timeout=$TIMEOUT &
     else
@@ -64,8 +52,6 @@ wait_for_wrapper()
     fi
     return $RESULT
 }
-
-# process arguments
 while [[ $# -gt 0 ]]
 do
     case "$1" in
@@ -128,17 +114,14 @@ do
         ;;
     esac
 done
-
 if [[ "$HOST" == "" || "$PORT" == "" ]]; then
     echoerr "Error: you need to provide a host and port to test."
     usage
 fi
-
 TIMEOUT=${TIMEOUT:-15}
 STRICT=${STRICT:-0}
 CHILD=${CHILD:-0}
 QUIET=${QUIET:-0}
-
 if [[ $CHILD -gt 0 ]]; then
     wait_for
     RESULT=$?
@@ -152,7 +135,6 @@ else
         RESULT=$?
     fi
 fi
-
 if [[ $CLI != "" ]]; then
     if [[ $RESULT -ne 0 && $STRICT -eq 1 ]]; then
         echoerr "$cmdname: strict mode, refusing to execute subprocess"

@@ -1,7 +1,5 @@
-FROM postgres:9.4
+FROM postgres:16
 
-# postgres container
-# used by ies to house the icat db. 
 ENV POSTGRES_USER     sea
 ENV POSTGRES_PASSWORD bass
 
