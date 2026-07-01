@@ -1,0 +1,24 @@
+# Exposes iRODS ports to the host so external tools (Python client,
+# Jargon, etc.) can connect without going through the icom container.
+# Useful for integration testing from the host machine.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  ports:
+    - "1247:1247"
+    - "1248:1248"
+
+consumers:
+  - hostname: irs1
+    ports:
+      - "11474:1247"
+
+clients:
+  - hostname: icom
+    mount: "."

@@ -1,0 +1,37 @@
+# Three resource servers for distributed storage testing.
+# Each consumer has a unique resource name and vault path.
+# All register with the same provider.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: resc_ssd
+        type: unixfilesystem
+        path: /vault/ssd
+  - hostname: irs2
+    resources:
+      - name: resc_hdd
+        type: unixfilesystem
+        path: /vault/hdd
+  - hostname: irs3
+    resources:
+      - name: resp_archive
+        type: unixfilesystem
+        path: /vault/archive
+
+clients:
+  - hostname: icom
+    mount: "."

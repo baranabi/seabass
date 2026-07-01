@@ -1,0 +1,32 @@
+# Air-gapped topology: no host filesystem is mounted into any container.
+# Data must be staged via iput / iget over the network.
+# Useful when you want to test pure network-based data transfer without
+# the risk of host filesystem side effects.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: rescA
+        type: unixfilesystem
+        path: /vault/A
+  - hostname: irs2
+    resources:
+      - name: rescB
+        type: unixfilesystem
+        path: /vault/B
+
+clients:
+  - hostname: icom

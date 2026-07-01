@@ -1,0 +1,28 @@
+# Three resources on the provider — simulates tiered storage (hot/warm/cold).
+# All vaults live on the provider container; an admin uses iadmin to set
+# storage tiering rules after startup.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: hotResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault_hot
+    - name: warmResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault_warm
+    - name: coldResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault_cold
+
+consumers: []
+
+clients:
+  - hostname: icom
+    mount: "."

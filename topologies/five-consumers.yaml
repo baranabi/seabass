@@ -1,0 +1,46 @@
+# Five resource servers for load-balancing and parallel transfer tests.
+# Each consumer has an independent vault on its own container.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: resc_1
+        type: unixfilesystem
+        path: /vault/1
+  - hostname: irs2
+    resources:
+      - name: resc_2
+        type: unixfilesystem
+        path: /vault/2
+  - hostname: irs3
+    resources:
+      - name: resc_3
+        type: unixfilesystem
+        path: /vault/3
+  - hostname: irs4
+    resources:
+      - name: resc_4
+        type: unixfilesystem
+        path: /vault/4
+  - hostname: irs5
+    resources:
+      - name: resc_5
+        type: unixfilesystem
+        path: /vault/5
+
+clients:
+  - hostname: icom
+    mount: "."

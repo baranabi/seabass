@@ -1,0 +1,25 @@
+# Four clients for concurrent-access testing.
+# Useful for exercising iRODS connection pool limits, ticket-based access,
+# and simultaneous read/write scenarios.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers: []
+
+clients:
+  - hostname: icom
+    mount: "."
+  - hostname: node1
+  - hostname: node2
+  - hostname: node3

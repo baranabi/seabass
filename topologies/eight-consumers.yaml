@@ -1,0 +1,63 @@
+# Eight resource servers — upper-end scale test.
+# Verifies that iRODS handles many simultaneous resource registrations,
+# that ilsresc shows all of them, and that parallel transfer distributes
+# across all available resources.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: n1
+    resources:
+      - name: n1_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n2
+    resources:
+      - name: n2_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n3
+    resources:
+      - name: n3_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n4
+    resources:
+      - name: n4_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n5
+    resources:
+      - name: n5_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n6
+    resources:
+      - name: n6_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n7
+    resources:
+      - name: n7_vault
+        type: unixfilesystem
+        path: /vault
+  - hostname: n8
+    resources:
+      - name: n8_vault
+        type: unixfilesystem
+        path: /vault
+
+clients:
+  - hostname: icom
+    mount: "."

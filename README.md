@@ -51,6 +51,29 @@ seabass             CLI tool (Python)
 | `seabass test <topology> <script>` | Stand up, run a bash script, tear down |
 | `seabass generate [topology]` | Generate `docker-compose.yml` without starting |
 
+## Example topologies
+
+16 pre-built files in `topologies/`:
+
+| File | Use case | Demonstrates |
+|------|----------|--------------|
+| `default.yaml` | Quick dev session | Minimal: 1 DB + 1 provider + 1 client |
+| `multi-resource.yaml` | Two resource servers | Multiple consumers with distinct resources |
+| `three-consumers.yaml` | Storage tiering | 3 consumers named SSD / HDD / archive |
+| `five-consumers.yaml` | Load-balancing tests | 5 consumers with numbered vaults |
+| `eight-consumers.yaml` | Scale test | 8 consumers for registration + transfer stress |
+| `single-consumer.yaml` | Baseline multi-server | Exactly 1 consumer, 1 client |
+| `two-consumers-two-clients.yaml` | Concurrent ops | 2 consumers + 2 clients (alice, bob) |
+| `two-clients.yaml` | Parallel access | 2 clients, one with host mount, one isolated |
+| `many-clients.yaml` | Connection pool limits | 4 clients (icom + node1-3) |
+| `storage-tiering.yaml` | Tiered storage | 3 resources on the provider (hot/warm/cold) |
+| `data-ingest.yaml` | Ingest pipeline | Staging client (host mount) + archive client |
+| `exposed-ports.yaml` | External tooling | Ports 1247/1248 mapped to host |
+| `renamed-zone.yaml` | Production-like | Custom zone `testzone`, all keys changed |
+| `no-mount.yaml` | Air-gapped testing | No host filesystem mounts |
+| `custom-keys.yaml` | Full schema reference | Every optional field populated |
+| `federation.yaml` | Future use | Reference stub for multi-compose federation |
+
 ## Topology reference
 
 ### Minimal (`topologies/default.yaml`)
@@ -76,42 +99,9 @@ clients:
     mount: "."
 ```
 
-### Multi-resource (`topologies/multi-resource.yaml`)
-
-```yaml
-zone_name: tempZone
-admin_password: password
-
-database:
-  hostname: icat
-
-provider:
-  hostname: ies
-  resources:
-    - name: demoResc
-      type: unixfilesystem
-      path: /var/lib/irods/Vault
-
-consumers:
-  - hostname: irs1
-    resources:
-      - name: SBRS_1
-        type: unixfilesystem
-        path: /var/lib/irods/Vault
-  - hostname: irs2
-    resources:
-      - name: SBRS_2
-        type: unixfilesystem
-        path: /var/lib/irods/Vault
-
-clients:
-  - hostname: icom
-    mount: "."
-```
-
-The generator creates one Docker Compose service per topology entry. Each consumer gets its own service with unique resource name and vault — no `--scale`, no post-start renaming.
-
 ### Custom topologies
+
+All fields beyond `zone_name`, `database.hostname`, `provider.hostname`, and at least one `provider.resources` entry are optional:
 
 ```yaml
 zone_name: myZone

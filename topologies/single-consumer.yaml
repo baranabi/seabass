@@ -1,0 +1,26 @@
+# Minimal multi-server: exactly one consumer and one client.
+# Useful as a baseline when testing features that involve resource servers.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: demoResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: extraResc
+        type: unixfilesystem
+        path: /vault/extra
+
+clients:
+  - hostname: icom
+    mount: "."

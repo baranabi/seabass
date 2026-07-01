@@ -1,0 +1,34 @@
+# Demonstrates a fully custom-named zone with non-default keys.
+# Use this as a template for production-like deployments where the default
+# "tempZone" name is not acceptable.
+
+zone_name: testzone
+admin_password: rods
+
+zone_key: CUSTOM_ZONE_KEY_1234567890
+negotiation_key: thisisatest32bytekeyfornegoti
+control_plane_key: thisisatest32bytekeyforcontrol
+
+database:
+  hostname: db
+  user: irods
+  password: irods
+  db_name: ICAT
+
+provider:
+  hostname: ies
+  resources:
+    - name: mainResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: extraResc
+        type: unixfilesystem
+        path: /vault/extra
+
+clients:
+  - hostname: icom
+    mount: "."

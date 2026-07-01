@@ -1,0 +1,24 @@
+# Two clients with different mount points — simulates a data-ingest pipeline.
+# The "staging" client mounts a host directory with incoming data.
+# The "archive" client has no mount and is used only for verification.
+# After iput from staging, an admin can iget on archive to verify.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: ingestResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers: []
+
+clients:
+  - hostname: staging
+    mount: /data/incoming
+  - hostname: archive

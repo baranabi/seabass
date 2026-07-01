@@ -1,0 +1,37 @@
+# Full configuration surface example.
+# Custom zone name, keys, database credentials, and explicit ports.
+# Illustrates every optional field in the topology schema.
+
+zone_name: prodzone
+admin_password: changeme
+
+zone_key: A1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P
+negotiation_key: abcdefghijklmnopqrstuvwxyz012345
+control_plane_key: 0123456789abcdef0123456789abcdef
+
+database:
+  hostname: postgres
+  image: postgres:16
+  user: dbadmin
+  password: dbsecret
+  db_name: RODS_CATALOG
+
+provider:
+  hostname: catalog
+  port: 1247
+  resources:
+    - name: primary
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: worker1
+    port: 1247
+    resources:
+      - name: worker1_vault
+        type: unixfilesystem
+        path: /vault/worker1
+
+clients:
+  - hostname: admin
+    mount: /data/input

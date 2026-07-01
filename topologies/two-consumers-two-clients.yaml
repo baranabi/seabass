@@ -1,0 +1,33 @@
+# Symmetric topology: 2 consumers, 2 clients.
+# Good for testing concurrent operations from multiple client endpoints
+# against multiple resource servers.
+
+zone_name: tempZone
+admin_password: password
+
+database:
+  hostname: icat
+
+provider:
+  hostname: ies
+  resources:
+    - name: providerResc
+      type: unixfilesystem
+      path: /var/lib/irods/Vault
+
+consumers:
+  - hostname: irs1
+    resources:
+      - name: eastResc
+        type: unixfilesystem
+        path: /vault/east
+  - hostname: irs2
+    resources:
+      - name: westResc
+        type: unixfilesystem
+        path: /vault/west
+
+clients:
+  - hostname: alice
+    mount: "."
+  - hostname: bob
